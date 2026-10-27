@@ -1,0 +1,90 @@
+<div class="admin-page">
+  <header class="topbar">
+    <div class="left">
+      <div class="logo-small">M</div>
+      <h1>Admin · Knowledge Base</h1>
+    </div>
+    <div class="actions">
+      <a routerLink="/chat">Open Chat →</a>
+      <button (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="form-card">
+      <h2>Add new document</h2>
+      <p class="sub">Enter the procedure, info, or email template. Attach a screenshot if helpful. It will be embedded automatically.</p>
+
+      <form (ngSubmit)="save()">
+        <div class="grid">
+          <div class="field full">
+            <label>Title *</label>
+            <input [(ngModel)]="title" name="title" required placeholder="e.g. How to track an order in the Rivoli system" />
+          </div>
+
+          <div class="field">
+            <label>Brand</label>
+            <select [(ngModel)]="brandId" name="brandId">
+              <option [ngValue]="null">All brands</option>
+              @for (b of brands; track b.id) {
+                <option [ngValue]="b.id">{{ b.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Country</label>
+            <select [(ngModel)]="countryId" name="countryId">
+              <option [ngValue]="null">All countries</option>
+              @for (c of countries; track c.id) {
+                <option [ngValue]="c.id">{{ c.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Category</label>
+            <select [(ngModel)]="categoryId" name="categoryId">
+              <option [ngValue]="null">None</option>
+              @for (c of categories; track c.id) {
+                <option [ngValue]="c.id">{{ c.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Language</label>
+            <select [(ngModel)]="language" name="language">
+              <option value="en">English</option>
+              <option value="ar">Arabic</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Content *</label>
+            <textarea [(ngModel)]="body" name="body" required rows="10"
+              placeholder="Write the steps, notes, or template here. Use plain text — you can add bullet steps on separate lines."></textarea>
+          </div>
+
+          <div class="field full">
+            <label>Reference image (optional)</label>
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+            @if (selectedFile) {
+              <small>Selected: {{ selectedFile.name }}</small>
+            }
+          </div>
+        </div>
+
+        @if (message) {
+          <div class="message" [class.ok]="message.startsWith('✅')">{{ message }}</div>
+        }
+
+        <div class="actions-bottom">
+          <button type="submit" class="primary" [disabled]="saving || !title || !body">
+            @if (saving) { Saving & embedding… } @else { Save & Embed }
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
